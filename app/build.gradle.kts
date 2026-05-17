@@ -15,8 +15,8 @@ android {
         applicationId = "com.tananaev.passportreader"
         minSdk = 23
         targetSdk = 37
-        versionCode = 22
-        versionName = "3.3"
+        versionCode = 23
+        versionName = "3.4"
     }
 
     signingConfigs {

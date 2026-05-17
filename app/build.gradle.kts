@@ -9,14 +9,26 @@ plugins {
 
 android {
     namespace = "com.tananaev.passportreader"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.tananaev.passportreader"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 22
         versionName = "3.3"
+    }
+
+    signingConfigs {
+        create("release") {
+            val storePath = System.getenv("KEYSTORE_FILE")
+            if (storePath != null) {
+                storeFile = file(storePath)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
     }
 
     flavorDimensions += "default"
@@ -26,6 +38,14 @@ android {
             extra["enableCrashlytics"] = false
         }
         create("google")
+    }
+
+    buildTypes {
+        getByName("release") {
+            if (System.getenv("KEYSTORE_FILE") != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
 
     compileOptions {

@@ -30,13 +30,13 @@ jobs:
           KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: ./gradlew :app:assembleGoogleRelease :app:assembleRegularRelease
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: google-apk
           path: app/build/outputs/apk/google/release/app-google-release.apk
           if-no-files-found: error
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: regular-apk
           path: app/build/outputs/apk/regular/release/app-regular-release.apk
@@ -52,7 +52,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: google-apk
           path: .
@@ -74,7 +74,7 @@ jobs:
             adb pull /sdcard/launch.png launch.png
             adb shell pidof com.tananaev.passportreader > /dev/null || { echo "App process not running after launch — crashed."; exit 1; }
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: launch-screenshot
           path: launch.png
@@ -86,12 +86,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: google-apk
           path: google-apk
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: regular-apk
           path: regular-apk
@@ -106,6 +106,6 @@ jobs:
           status: completed
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: regular-apk/app-regular-release.apk
